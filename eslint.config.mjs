@@ -101,5 +101,5 @@ export default defineConfig(
       "@typescript-eslint/no-var-requires": "off",
       "no-console": "off",
     },
-  },
+  }
 );

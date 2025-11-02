@@ -1,8 +1,12 @@
 import type { NextFunction, Request, Response } from "express";
-import type { Item} from "../models/item";
+import type { Item } from "../models/item";
 import { items } from "../models/item";
 
-export const createItem = (req: Request, res: Response, next: NextFunction): void => {
+export const createItem = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   try {
     const { name } = req.body;
     const newItem: Item = { id: Date.now(), name };
@@ -13,7 +17,11 @@ export const createItem = (req: Request, res: Response, next: NextFunction): voi
   }
 };
 
-export const getItems = (req: Request, res: Response, next: NextFunction): void => {
+export const getItems = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   try {
     res.json(items);
   } catch (error) {
@@ -39,7 +47,11 @@ export const getItemById = (
   }
 };
 
-export const updateItem = (req: Request, res: Response, next: NextFunction): void => {
+export const updateItem = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   try {
     const id = parseInt(req.params.id, 10);
     const { name } = req.body;
@@ -55,7 +67,11 @@ export const updateItem = (req: Request, res: Response, next: NextFunction): voi
   }
 };
 
-export const deleteItem = (req: Request, res: Response, next: NextFunction): void => {
+export const deleteItem = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   try {
     const id = parseInt(req.params.id, 10);
     const itemIndex = items.findIndex(i => i.id === id);
