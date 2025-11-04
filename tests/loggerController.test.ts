@@ -8,7 +8,7 @@
 
 import type { Request, Response, NextFunction } from "express";
 import { log } from "../src/controllers/loggerController";
-import logger from "../src/configs/logger"
+import logger from "../src/configs/logger";
 
 describe("Logger Controller", () => {
   let res: Response;
