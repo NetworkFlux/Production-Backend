@@ -4,7 +4,7 @@ export const formatValidationError = (
   errors: ZodError<{
     username: string;
     password: string;
-    role: "user" | "dev";
+    role?: "user" | "dev";
   }>
 ): string => {
   if (!errors || !errors.issues) return "Validation failed";

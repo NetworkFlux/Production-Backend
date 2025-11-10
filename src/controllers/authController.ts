@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { signUpSchema } from "../validations/auth.validation";
+import { signInSchema, signUpSchema } from "../validations/auth.validation";
 import { ZodSafeParseResult } from "zod";
 import { formatValidationError } from "../utils/format";
 import logger from "../configs/logger";
@@ -7,6 +7,7 @@ import * as userService from "../service/user.service";
 import { jwtToken } from "../utils/jwt";
 import { cookies } from "../utils/cookies";
 import { User } from "../models/user";
+import { authenticateUser } from "../service/auth.service";
 
 export const signUp = async (
   req: Request,
@@ -50,20 +51,81 @@ export const signUp = async (
         createdAt: user.createdAt,
       },
     });
-  } catch (error) {
-    logger.error("Signup error", error);
+  } catch (error: any) {
+    logger.error("SignUp error", error);
+
+    if (error.message === "User with this username already exists")
+      return res.status(400).json({ error: "Username already exists" });
     next(error);
   }
 };
 
-export const signIn = (
+export const signIn = async (
   req: Request,
   res: Response,
   next: NextFunction
-): void => {};
+): Promise<Response | undefined> => {
+  try {
+    const validationResult: ZodSafeParseResult<{
+      username: string;
+      password: string;
+    }> = signInSchema.safeParse(req.body);
+
+    if (!validationResult.success) {
+      return res.status(400).json({
+        error: "Validation failed",
+        details: formatValidationError(validationResult.error),
+      });
+    }
+
+    const { username, password } = validationResult.data;
+
+    const user = await authenticateUser(username, password);
+
+    const token = jwtToken.sign({
+      id: user.id,
+      username: user.username,
+      role: user.role,
+    });
+
+    cookies.set(res, "token", token);
+
+    logger.info(`User signed in successfully: ${username}`);
+    res.status(200).json({
+      message: "user signed in successfully",
+      user: {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+      },
+    });
+  } catch (error: any) {
+    logger.error("Sign in error", error);
+    if (
+      error.message === "User not found" ||
+      error.message === "Invalid password"
+    ) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    next(error);
+  }
+};
 
 export const signOut = (
   req: Request,
   res: Response,
   next: NextFunction
-): void => {};
+): void => {
+  try {
+    cookies.clear(res, "token");
+
+    logger.info("User signed out successfully");
+    res.status(200).json({
+      message: "User signed out successfully",
+    });
+  } catch (error) {
+    logger.error("Sign out error", error);
+    next(error);
+  }
+};

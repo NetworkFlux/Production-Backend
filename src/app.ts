@@ -9,7 +9,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
-import securityMiddleware from "./middlewares/security.middleware"
+import securityMiddleware from "./middlewares/security.middleware";
 
 const app = express();
 
@@ -33,13 +33,11 @@ app.use("/api/logger", loggerRoutes);
 app.use("/api/auth", authRoutes);
 
 app.use("/api/health", (req: Request, res: Response) => {
-  res
-    .status(200)
-    .json({
-      status: "OK",
-      timestamp: new Date().toISOString(),
-      uptime: process.uptime(),
-    });
+  res.status(200).json({
+    status: "OK",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
 });
 
 app.use("/api", (req: Request, res: Response) => {
