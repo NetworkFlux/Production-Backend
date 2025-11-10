@@ -3,12 +3,13 @@ import { signInSchema, signUpSchema } from "./auth.validation";
 import { ZodSafeParseResult } from "zod";
 import { formatValidationError } from "../utils/format";
 import logger from "../configs/logger";
-import * as userService from "../user/user.service";
+import { userService } from "../user/user.service";
+import { authService } from "../auth/auth.service";
 import { jwtToken } from "../utils/jwt";
 import { cookies } from "../utils/cookies";
 import { User } from "../user/user.model";
-import { authenticateUser } from "./auth.service";
 
+// Route: "api/auth/sign-up"
 export const signUp = async (
   req: Request,
   res: Response,
@@ -60,6 +61,7 @@ export const signUp = async (
   }
 };
 
+// Route: "api/auth/sign-in"
 export const signIn = async (
   req: Request,
   res: Response,
@@ -80,7 +82,7 @@ export const signIn = async (
 
     const { username, password } = validationResult.data;
 
-    const user = await authenticateUser(username, password);
+    const user = await authService.authenticateUser(username, password);
 
     const token = jwtToken.sign({
       id: user.id,
@@ -112,6 +114,7 @@ export const signIn = async (
   }
 };
 
+// Route: "api/auth/sign-out"
 export const signOut = (
   req: Request,
   res: Response,

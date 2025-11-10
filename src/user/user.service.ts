@@ -1,6 +1,6 @@
 import logger from "../configs/logger";
 import { User } from "./user.model";
-import { hashPassword } from "../auth/auth.service";
+import { authService } from "../auth/auth.service";
 
 export class UserService {
   private users: User[] = [];
@@ -29,7 +29,7 @@ export class UserService {
 
       if (existingUser !== undefined) throw new Error("User already exists");
 
-      const hashedPassword = await hashPassword(password);
+      const hashedPassword = await authService.hashPassword(password);
 
       const newUser: User = {
         id: Date.now(),

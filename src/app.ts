@@ -9,7 +9,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRoutes from "./user/user.routes";
 import securityMiddleware from "./middlewares/security.middleware";
-import authRoutes from "./auth/authRoutes";
+import authRoutes from "./auth/auth.routes";
 
 const app = express();
 

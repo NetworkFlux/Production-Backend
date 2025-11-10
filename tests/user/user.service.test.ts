@@ -1,20 +1,17 @@
 /**
  * @file user.service.test.ts
- * @description Unit tests for the UserService class.
- * Covers:
- *  ✅ Normal (happy) paths
- *  ❌ Not found / duplicate paths
- *  ⚠️ Error paths (ensuring thrown errors are handled)
+ * @description Unit tests for UserService
  */
 
 import { UserService } from "../../src/user/user.service";
-import { hashPassword } from "../../src/auth/auth.service";
+import { authService } from "../../src/auth/auth.service";
 import logger from "../../src/configs/logger";
 
 // --- Mocks -------------------------------------------------------------------
-
 jest.mock("../../src/auth/auth.service", () => ({
-  hashPassword: jest.fn().mockResolvedValue("hashed_pwd"),
+  authService: {
+    hashPassword: jest.fn().mockResolvedValue("hashed_pwd"),
+  },
 }));
 
 jest.mock("../../src/configs/logger", () => ({
@@ -22,28 +19,26 @@ jest.mock("../../src/configs/logger", () => ({
   error: jest.fn(),
 }));
 
-// --- Test suite --------------------------------------------------------------
-
+// --- Test Suite --------------------------------------------------------------
 describe("UserService", () => {
   let service: UserService;
 
   beforeEach(() => {
-    service = new UserService(); // fresh instance for each test
+    service = new UserService();
     jest.clearAllMocks();
   });
 
-  // ---------------------------------------------------------------------------
-  // ✅ CREATE USER
-  // ---------------------------------------------------------------------------
-
+  // ✅ CREATE
   it("should create a new user successfully", async () => {
     const user = await service.createUser("alice", "1234", "user");
 
     expect(user.username).toBe("alice");
     expect(user.role).toBe("user");
     expect(user.password).toBe("hashed_pwd");
+
+    expect(authService.hashPassword).toHaveBeenCalledWith("1234");
     expect(logger.info).toHaveBeenCalledWith(
-      expect.stringContaining("[SERVICE] User"),
+      expect.stringContaining("[SERVICE] User")
     );
 
     const all = service.getAllUsers();
@@ -59,28 +54,27 @@ describe("UserService", () => {
     await service.createUser("charlie", "1234", "user");
 
     await expect(
-      service.createUser("charlie", "abcd", "user"),
+      service.createUser("charlie", "abcd", "user")
     ).rejects.toThrow("User already exists");
 
     expect(logger.error).toHaveBeenCalledWith(
-      expect.stringContaining("Error creating user"),
+      expect.stringContaining("Error creating user")
     );
   });
 
   it("should throw and log if hashPassword rejects", async () => {
-    (hashPassword as jest.Mock).mockRejectedValueOnce(new Error("Hash fail"));
+    (authService.hashPassword as jest.Mock).mockRejectedValueOnce(
+      new Error("Hash fail")
+    );
 
     await expect(
-      service.createUser("eve", "pwd", "user"),
+      service.createUser("eve", "pwd", "user")
     ).rejects.toThrow("Hash fail");
 
     expect(logger.error).toHaveBeenCalled();
   });
 
-  // ---------------------------------------------------------------------------
   // ✅ GETTERS
-  // ---------------------------------------------------------------------------
-
   it("should get a user by ID", async () => {
     const u = await service.createUser("user1", "pwd", "user");
     const found = service.getUserById(u.id);
@@ -103,15 +97,10 @@ describe("UserService", () => {
     expect(found).toBeUndefined();
   });
 
-  // ---------------------------------------------------------------------------
-  // ✅ UPDATE USER
-  // ---------------------------------------------------------------------------
-
+  // ✅ UPDATE
   it("should update an existing user's username", async () => {
     const u = await service.createUser("oldname", "pwd", "user");
     const updated = service.updateUser(u.id, "newname");
-
-    expect(updated).toBeDefined();
     expect(updated?.username).toBe("newname");
   });
 
@@ -120,15 +109,10 @@ describe("UserService", () => {
     expect(result).toBeUndefined();
   });
 
-  // ---------------------------------------------------------------------------
-  // ✅ DELETE USER
-  // ---------------------------------------------------------------------------
-
+  // ✅ DELETE
   it("should delete an existing user", async () => {
     const u = await service.createUser("todelete", "pwd", "user");
-
     const deleted = service.deleteUser(u.id);
-
     expect(deleted?.username).toBe("todelete");
     expect(service.getAllUsers().length).toBe(0);
   });

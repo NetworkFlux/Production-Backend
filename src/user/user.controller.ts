@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { userService } from "./user.service";
 import logger from "../configs/logger";
 
-// Route: "api/users/"
+// Route: "api/users/ GET"
 export const getUsers = (
   req: Request,
   res: Response,
@@ -22,7 +22,7 @@ export const getUsers = (
   }
 };
 
-// Route: "api/users/:id"
+// Route: "api/users/:id GET"
 export const getUserById = (
   req: Request,
   res: Response,
@@ -48,6 +48,7 @@ export const getUserById = (
   }
 };
 
+// Route: "api/users/ POST"
 export const createUser = async (
   req: Request,
   res: Response,
@@ -63,6 +64,7 @@ export const createUser = async (
   }
 };
 
+// Route: "api/users/:id PUT"
 export const updateUser = (
   req: Request,
   res: Response,
@@ -82,6 +84,7 @@ export const updateUser = (
   }
 };
 
+// Route: "api/users/:id DELETE"
 export const deleteUser = (
   req: Request,
   res: Response,
