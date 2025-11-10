@@ -9,6 +9,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
+import securityMiddleware from "./middlewares/security.middleware"
 
 const app = express();
 
@@ -23,6 +24,8 @@ app.use(
     stream: { write: message => logger.info(message.trim()) },
   })
 );
+
+app.use(securityMiddleware);
 app.use("/api/users", userRoutes);
 
 app.use("/api/logger", loggerRoutes);
