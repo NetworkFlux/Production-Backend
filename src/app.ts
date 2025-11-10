@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import itemRoutes from "./routes/userRoutes";
+import itemRoutes from "./user/user.routes";
 import { errorHandler } from "./middlewares/errorHandler";
 import loggerRoutes from "./routes/loggerRoutes";
 import helmet from "helmet";
@@ -7,9 +7,9 @@ import morgan from "morgan";
 import logger from "./configs/logger";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import authRoutes from "./routes/authRoutes";
-import userRoutes from "./routes/userRoutes";
+import userRoutes from "./user/user.routes";
 import securityMiddleware from "./middlewares/security.middleware";
+import authRoutes from "./auth/authRoutes";
 
 const app = express();
 

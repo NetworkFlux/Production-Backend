@@ -37,12 +37,10 @@ const securityMiddleware = async (
         path: req.path,
       });
 
-      return res
-        .status(403)
-        .json({
-          error: "Forbidden",
-          message: "Authomated requests are not allowed",
-        });
+      return res.status(403).json({
+        error: "Forbidden",
+        message: "Authomated requests are not allowed",
+      });
     }
     if (decision.isDenied() && decision.reason.isShield()) {
       logger.warn("Shield request blocked", {
@@ -52,12 +50,10 @@ const securityMiddleware = async (
         method: req.method,
       });
 
-      return res
-        .status(403)
-        .json({
-          error: "Forbidden",
-          message: "Request blocked by security policy",
-        });
+      return res.status(403).json({
+        error: "Forbidden",
+        message: "Request blocked by security policy",
+      });
     }
     if (decision.isDenied() && decision.reason.isRateLimit()) {
       logger.warn("Rate limit exceeded", {
@@ -74,12 +70,10 @@ const securityMiddleware = async (
     next();
   } catch (error) {
     console.error("Archet middleware error: ", error);
-    res
-      .status(500)
-      .json({
-        error: "Internal server error",
-        message: "Something went wrong with security middleware",
-      });
+    res.status(500).json({
+      error: "Internal server error",
+      message: "Something went wrong with security middleware",
+    });
   }
 };
 

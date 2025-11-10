@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express";
-import { signInSchema, signUpSchema } from "../validations/auth.validation";
+import { signInSchema, signUpSchema } from "./auth.validation";
 import { ZodSafeParseResult } from "zod";
 import { formatValidationError } from "../utils/format";
 import logger from "../configs/logger";
-import * as userService from "../service/user.service";
+import * as userService from "../user/user.service";
 import { jwtToken } from "../utils/jwt";
 import { cookies } from "../utils/cookies";
-import { User } from "../models/user";
-import { authenticateUser } from "../service/auth.service";
+import { User } from "../user/user.model";
+import { authenticateUser } from "./auth.service";
 
 export const signUp = async (
   req: Request,

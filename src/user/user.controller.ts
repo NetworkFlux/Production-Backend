@@ -1,47 +1,62 @@
 import { Request, Response, NextFunction } from "express";
-import * as userService from "../service/user.service";
+import { userService } from "./user.service";
 import logger from "../configs/logger";
 
+// Route: "api/users/"
 export const getUsers = (
   req: Request,
   res: Response,
   next: NextFunction
 ): void => {
   try {
+    const userRole: string | undefined = req.user?.role;
+    if (userRole !== "dev") {
+      res.status(403).json({ message: "Operation denied"});
+      return;
+    }
+
     const users = userService.getAllUsers();
-    res.json(users);
+    res.status(200).json(users);
   } catch (error) {
     next(error);
   }
 };
 
+// Route: "api/users/:id"
 export const getUserById = (
   req: Request,
   res: Response,
   next: NextFunction
 ): void => {
   try {
+    const userRole: string | undefined = req.user?.role;
+    if (userRole !== "dev") {
+      res.status(403).json({ message: "Operation denied"});
+      return;
+    }
+
     const id = parseInt(req.params.id, 10);
     const user = userService.getUserById(id);
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
     }
-    res.json(user);
-  } catch (error) {
+
+    res.status(200).json(user);
+  } catch (error: any) {
     next(error);
   }
 };
 
-export const createUser = (
+export const createUser = async (
   req: Request,
   res: Response,
   next: NextFunction
-): void => {
+): Promise<void> => {
   try {
     const { username, password, role } = req.body;
-    const newUser = userService.createUser(username, password, role);
-    logger.info("New user created: ", newUser);
+    const newUser = await userService.createUser(username, password, role);
+    logger.info("[CONTROLLER] New user created: ", newUser);
     res.status(201).json(newUser);
   } catch (error) {
     next(error);
@@ -61,7 +76,7 @@ export const updateUser = (
       res.status(404).json({ message: "User not found" });
       return;
     }
-    res.json(updatedUser);
+    res.status(200).json(updatedUser);
   } catch (error) {
     next(error);
   }
@@ -80,7 +95,7 @@ export const deleteUser = (
       return;
     }
     logger.info("User deleted: ", deleted);
-    res.json(deleted);
+    res.status(200).json(deleted);
   } catch (error) {
     next(error);
   }

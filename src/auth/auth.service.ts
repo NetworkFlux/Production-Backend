@@ -1,7 +1,7 @@
 import logger from "../configs/logger";
 import bcrypt from "bcrypt";
-import { User } from "../models/user";
-import { getUserByUsername } from "./user.service";
+import { User } from "../user/user.model";
+import { getUserByUsername } from "../user/user.service";
 
 export const hashPassword = async (password: string): Promise<string> => {
   try {
