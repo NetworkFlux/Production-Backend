@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import aj from "../configs/arcjet";
 import { slidingWindow } from "@arcjet/node";
 import logger from "../configs/logger";

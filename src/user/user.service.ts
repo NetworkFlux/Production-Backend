@@ -1,5 +1,5 @@
 import logger from "../configs/logger";
-import { User } from "./user.model";
+import type { User } from "./user.model";
 import { authService } from "../auth/auth.service";
 
 export class UserService {

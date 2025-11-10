@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { userService } from "./user.service";
 import logger from "../configs/logger";
 
@@ -11,7 +11,7 @@ export const getUsers = (
   try {
     const userRole: string | undefined = req.user?.role;
     if (userRole !== "dev") {
-      res.status(403).json({ message: "Operation denied"});
+      res.status(403).json({ message: "Operation denied" });
       return;
     }
 
@@ -31,7 +31,7 @@ export const getUserById = (
   try {
     const userRole: string | undefined = req.user?.role;
     if (userRole !== "dev") {
-      res.status(403).json({ message: "Operation denied"});
+      res.status(403).json({ message: "Operation denied" });
       return;
     }
 

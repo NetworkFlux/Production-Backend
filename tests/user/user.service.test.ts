@@ -53,9 +53,9 @@ describe("UserService", () => {
   it("should throw an error when username already exists", async () => {
     await service.createUser("charlie", "1234", "user");
 
-    await expect(
-      service.createUser("charlie", "abcd", "user")
-    ).rejects.toThrow("User already exists");
+    await expect(service.createUser("charlie", "abcd", "user")).rejects.toThrow(
+      "User already exists"
+    );
 
     expect(logger.error).toHaveBeenCalledWith(
       expect.stringContaining("Error creating user")
@@ -67,9 +67,9 @@ describe("UserService", () => {
       new Error("Hash fail")
     );
 
-    await expect(
-      service.createUser("eve", "pwd", "user")
-    ).rejects.toThrow("Hash fail");
+    await expect(service.createUser("eve", "pwd", "user")).rejects.toThrow(
+      "Hash fail"
+    );
 
     expect(logger.error).toHaveBeenCalled();
   });

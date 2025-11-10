@@ -1,4 +1,5 @@
-import express, { Request, Response } from "express";
+import type { Request, Response } from "express";
+import express from "express";
 import itemRoutes from "./user/user.routes";
 import { errorHandler } from "./middlewares/errorHandler";
 import loggerRoutes from "./routes/loggerRoutes";

@@ -88,7 +88,10 @@ describe("User Controller", () => {
   // ---------------------------------------------------------------------------
 
   it("should return a user by ID if role is dev", () => {
-    const req = { params: { id: "1" }, user: { role: "dev" } } as unknown as Request;
+    const req = {
+      params: { id: "1" },
+      user: { role: "dev" },
+    } as unknown as Request;
     const fakeUser = { id: 1, username: "Alice" };
     (userService.getUserById as jest.Mock).mockReturnValue(fakeUser);
 
@@ -100,7 +103,10 @@ describe("User Controller", () => {
   });
 
   it("should return 404 if user not found", () => {
-    const req = { params: { id: "999" }, user: { role: "dev" } } as unknown as Request;
+    const req = {
+      params: { id: "999" },
+      user: { role: "dev" },
+    } as unknown as Request;
     (userService.getUserById as jest.Mock).mockReturnValue(undefined);
 
     getUserById(req, res, next);
@@ -110,7 +116,10 @@ describe("User Controller", () => {
   });
 
   it("should return 403 if role is not dev (getUserById)", () => {
-    const req = { params: { id: "1" }, user: { role: "user" } } as unknown as Request;
+    const req = {
+      params: { id: "1" },
+      user: { role: "user" },
+    } as unknown as Request;
 
     getUserById(req, res, next);
 
@@ -119,7 +128,10 @@ describe("User Controller", () => {
   });
 
   it("should call next(error) if getUserById throws", () => {
-    const req = { params: { id: "1" }, user: { role: "dev" } } as unknown as Request;
+    const req = {
+      params: { id: "1" },
+      user: { role: "dev" },
+    } as unknown as Request;
     (userService.getUserById as jest.Mock).mockImplementation(() => {
       throw new Error("Boom");
     });

@@ -1,13 +1,13 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { signInSchema, signUpSchema } from "./auth.validation";
-import { ZodSafeParseResult } from "zod";
+import type { ZodSafeParseResult } from "zod";
 import { formatValidationError } from "../utils/format";
 import logger from "../configs/logger";
 import { userService } from "../user/user.service";
 import { authService } from "../auth/auth.service";
 import { jwtToken } from "../utils/jwt";
 import { cookies } from "../utils/cookies";
-import { User } from "../user/user.model";
+import type { User } from "../user/user.model";
 
 // Route: "api/auth/sign-up"
 export const signUp = async (

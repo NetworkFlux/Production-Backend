@@ -1,6 +1,6 @@
 import logger from "../configs/logger";
 import bcrypt from "bcrypt";
-import { User } from "../user/user.model";
+import type { User } from "../user/user.model";
 import { userService } from "../user/user.service";
 
 export class AuthService {
@@ -13,7 +13,10 @@ export class AuthService {
     }
   }
 
-  async comparePassword(password: string, hashedPassword: string): Promise<boolean> {
+  async comparePassword(
+    password: string,
+    hashedPassword: string
+  ): Promise<boolean> {
     try {
       return await bcrypt.compare(password, hashedPassword);
     } catch (error: any) {
@@ -24,7 +27,8 @@ export class AuthService {
 
   async authenticateUser(username: string, password: string): Promise<User> {
     try {
-      const existingUser: User | undefined = userService.getUserByUsername(username);
+      const existingUser: User | undefined =
+        userService.getUserByUsername(username);
 
       if (existingUser === undefined) {
         throw new Error("[SERVICE] User not found");
@@ -39,7 +43,9 @@ export class AuthService {
         throw new Error("[SERVICE] Invalid password");
       }
 
-      logger.info(`[SERVICE] User ${existingUser.username} authenticated successfully`);
+      logger.info(
+        `[SERVICE] User ${existingUser.username} authenticated successfully`
+      );
 
       return existingUser;
     } catch (error: any) {

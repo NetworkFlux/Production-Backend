@@ -69,6 +69,11 @@ export default defineConfig(
       "@typescript-eslint/array-type": ["error", { default: "array-simple" }],
 
       //
+      // 🚑 TEMP FIX for TS 8.4x + ESLint 9 bug
+      //
+      "@typescript-eslint/unified-signatures": "off",
+
+      //
       // ✅ Stylistic and clarity rules
       //
       "@typescript-eslint/ban-ts-comment": [

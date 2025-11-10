@@ -1,4 +1,4 @@
-import { CookieOptions, Request, Response } from "express";
+import type { CookieOptions, Request, Response } from "express";
 import config from "../configs/config";
 
 export const cookies = {

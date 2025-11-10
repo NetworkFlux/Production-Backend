@@ -1,4 +1,5 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import type { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import config from "../configs/config";
 import logger from "../configs/logger";
 

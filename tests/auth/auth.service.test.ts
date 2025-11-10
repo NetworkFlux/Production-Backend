@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
 import logger from "../../src/configs/logger";
 import { authService } from "../../src/auth/auth.service";
 import { userService } from "../../src/user/user.service";
-import { User } from "../../src/user/user.model";
+import type { User } from "../../src/user/user.model";
 
 // --- Mocks -------------------------------------------------------------------
 jest.mock("bcrypt", () => ({
@@ -100,9 +100,9 @@ describe("AuthService", () => {
   it("should throw if user not found", async () => {
     (userService.getUserByUsername as jest.Mock).mockReturnValue(undefined);
 
-    await expect(
-      authService.authenticateUser("ghost", "pw")
-    ).rejects.toThrow("[SERVICE] User not found");
+    await expect(authService.authenticateUser("ghost", "pw")).rejects.toThrow(
+      "[SERVICE] User not found"
+    );
   });
 
   it("should throw if password invalid", async () => {
