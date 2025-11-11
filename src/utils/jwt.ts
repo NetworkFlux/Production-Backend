@@ -7,7 +7,7 @@ const JWT_SECRET = config.jwtSecret;
 const JWT_EXPIRES_IN = "1d";
 
 export const jwtToken = {
-  sign: (payload: JwtPayload) => {
+  sign: (payload: JwtPayload): string => {
     try {
       return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
     } catch (error) {

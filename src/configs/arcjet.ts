@@ -1,9 +1,4 @@
-import arcjet, {
-  shield,
-  detectBot,
-  tokenBucket,
-  slidingWindow,
-} from "@arcjet/node";
+import arcjet, { shield, detectBot, slidingWindow } from "@arcjet/node";
 import config from "./config";
 
 const aj = arcjet({

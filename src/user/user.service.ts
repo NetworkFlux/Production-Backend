@@ -44,7 +44,7 @@ export class UserService {
       logger.info(`[SERVICE] User ${newUser} created successfully`);
 
       return newUser;
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error(`[SERVICE] Error creating user: ${error}`);
       throw error;
     }

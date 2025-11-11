@@ -52,10 +52,13 @@ export const signUp = async (
         createdAt: user.createdAt,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error("SignUp error", error);
 
-    if (error.message === "User with this username already exists")
+    if (
+      error instanceof Error &&
+      error.message === "User with this username already exists"
+    )
       return res.status(400).json({ error: "Username already exists" });
     next(error);
   }
@@ -101,11 +104,12 @@ export const signIn = async (
         role: user.role,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error("Sign in error", error);
     if (
-      error.message === "User not found" ||
-      error.message === "Invalid password"
+      error instanceof Error &&
+      (error.message === "User not found" ||
+        error.message === "Invalid password")
     ) {
       return res.status(401).json({ error: "Invalid credentials" });
     }

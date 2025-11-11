@@ -7,7 +7,7 @@ export class AuthService {
   async hashPassword(password: string): Promise<string> {
     try {
       return await bcrypt.hash(password, 100);
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error(`[SERVICE] Error hashing password: ${error}`);
       throw new Error("[SERVICE] Error hashing password");
     }
@@ -19,7 +19,7 @@ export class AuthService {
   ): Promise<boolean> {
     try {
       return await bcrypt.compare(password, hashedPassword);
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error(`[SERVICE] Error comparing password: ${error}`);
       throw new Error("[SERVICE] Error comparing password");
     }
@@ -48,7 +48,7 @@ export class AuthService {
       );
 
       return existingUser;
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error(`[SERVICE] Error authenticating user: ${error}`);
       throw error;
     }

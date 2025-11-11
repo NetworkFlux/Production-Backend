@@ -8,8 +8,8 @@ import { userService } from "../../src/user/user.service";
 import { authService } from "../../src/auth/auth.service";
 import { jwtToken } from "../../src/utils/jwt";
 import { cookies } from "../../src/utils/cookies";
-import logger from "../../src/configs/logger";
 import { signInSchema, signUpSchema } from "../../src/auth/auth.validation";
+import type { Request, Response } from "express";
 
 jest.mock("../../src/user/user.service");
 jest.mock("../../src/auth/auth.service");
@@ -25,7 +25,7 @@ jest.mock("../../src/utils/format", () => ({
 }));
 
 describe("Auth Controller", () => {
-  let res: any;
+  let res: Response;
   let next: jest.Mock;
 
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe("Auth Controller", () => {
     res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
-    };
+    } as unknown as Response;
     next = jest.fn();
   });
 
@@ -57,7 +57,7 @@ describe("Auth Controller", () => {
     (jwtToken.sign as jest.Mock).mockReturnValue("token123");
 
     await signUp(
-      { body: { username: "alice", password: "pw", role: "user" } } as any,
+      { body: { username: "alice", password: "pw", role: "user" } } as Request,
       res,
       next
     );
@@ -79,7 +79,7 @@ describe("Auth Controller", () => {
       error: "fail",
     });
 
-    await signUp({ body: {} } as any, res, next);
+    await signUp({ body: {} } as Request, res, next);
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({
@@ -97,7 +97,7 @@ describe("Auth Controller", () => {
       new Error("User with this username already exists")
     );
 
-    await signUp({ body: {} } as any, res, next);
+    await signUp({ body: {} } as Request, res, next);
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({
@@ -113,7 +113,7 @@ describe("Auth Controller", () => {
     });
     (userService.createUser as jest.Mock).mockRejectedValue(error);
 
-    await signUp({ body: {} } as any, res, next);
+    await signUp({ body: {} } as Request, res, next);
 
     expect(next).toHaveBeenCalledWith(error);
   });
@@ -137,7 +137,7 @@ describe("Auth Controller", () => {
     (jwtToken.sign as jest.Mock).mockReturnValue("token456");
 
     await signIn(
-      { body: { username: "john", password: "pw" } } as any,
+      { body: { username: "john", password: "pw" } } as Request,
       res,
       next
     );
@@ -162,7 +162,7 @@ describe("Auth Controller", () => {
       new Error("Invalid password")
     );
 
-    await signIn({ body: {} } as any, res, next);
+    await signIn({ body: {} } as Request, res, next);
 
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.json).toHaveBeenCalledWith({
@@ -176,7 +176,7 @@ describe("Auth Controller", () => {
       error: "fail",
     });
 
-    await signIn({ body: {} } as any, res, next);
+    await signIn({ body: {} } as Request, res, next);
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({
@@ -193,7 +193,7 @@ describe("Auth Controller", () => {
     });
     (authService.authenticateUser as jest.Mock).mockRejectedValue(error);
 
-    await signIn({ body: {} } as any, res, next);
+    await signIn({ body: {} } as Request, res, next);
 
     expect(next).toHaveBeenCalledWith(error);
   });
@@ -202,7 +202,7 @@ describe("Auth Controller", () => {
   // 🧩 signOut
   // ---------------------------------------------------------------------------
   it("should sign out successfully", () => {
-    signOut({} as any, res, next);
+    signOut({} as Request, res, next);
 
     expect(cookies.clear).toHaveBeenCalledWith(res, "token");
     expect(res.status).toHaveBeenCalledWith(200);
@@ -216,7 +216,7 @@ describe("Auth Controller", () => {
       throw new Error("fail");
     });
 
-    signOut({} as any, res, next);
+    signOut({} as Request, res, next);
 
     expect(next).toHaveBeenCalledWith(expect.any(Error));
   });

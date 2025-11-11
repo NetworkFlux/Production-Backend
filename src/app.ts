@@ -1,6 +1,5 @@
 import type { Request, Response } from "express";
 import express from "express";
-import itemRoutes from "./user/user.routes";
 import { errorHandler } from "./middlewares/errorHandler";
 import loggerRoutes from "./routes/loggerRoutes";
 import helmet from "helmet";
@@ -44,7 +43,5 @@ app.use("/api/health", (req: Request, res: Response) => {
 app.use("/api", (req: Request, res: Response) => {
   res.status(200).json({ message: "3dots API is running!" });
 });
-
-app.use(errorHandler);
 
 export default app;

@@ -43,7 +43,7 @@ export const getUserById = (
     }
 
     res.status(200).json(user);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };

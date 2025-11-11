@@ -7,21 +7,18 @@ const securityMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<Response | undefined> => {
   try {
     const role: string = req.user?.role || "user";
 
     let limit: number;
-    let message: string;
 
     switch (role) {
       case "dev":
         limit = 20;
-        message = "Dev request limit exceeded (20 second). Slow down.";
         break;
       default:
         limit = 10;
-        message = "User request limit exceeded (10 second). Slow down.";
         break;
     }
 
